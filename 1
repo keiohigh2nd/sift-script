@@ -248,34 +248,41 @@ if __name__ == '__main__':
         # -*- coding: utf-8 -*-	
 	##write to disc
 	f = open('../good_desc.txt', 'a')
-        for arr in desc_g:
-            for val in arr:
-                f.write(str(val))
-                f.write('\t')
-            f.write('\n')
+        for x_a in xrange(len(kp_m)):
+ 	    a = str(desc_m[x_a])
+            a_1 = a.lstrip()
+            b = a_1.replace('[','\t')
+            c = b.replace(']','')
+            d = c.replace('.','\t')
+            f.write(d)
 	f.close()
 		
 	f = open('../mal_desc.txt', 'a')
-	for arr in desc_m:
-		for val in arr:
-			f.write(str(val))
-			f.write('\t')
-		f.write('\n')
+	for x_a in xrange(len(kp_g)):
+		a = str(desc_g[x_a])
+		a_1 = a.lstrip()
+		b = a_1.replace('[','\t')
+		c = b.replace(']','')
+		d = c.replace('.','\t')
+		f.write(d)
 	f.close()
 	
+	f = open('../query_kp.txt', 'a')
+	f.write(str(kp3))
+	f.close()
 	
 	f = open('../query_desc.txt', 'a')
-        for arr in desc3:
-                for val in arr:
-                        f.write(str(val))
-                        f.write('\t')
-                f.write('\n')
-        f.close()
- 
+	for x_a in xrange(len(kp3)):
+		a = str(desc3[x_a])
+		a_1 = a.lstrip()
+		b = a_1.replace('[','\t')
+		c = b.replace(']','')
+		d = c.replace('.','\t')
+		f.write(d)
+	f.close()
+        
         green = (0, 255, 0)
 	red = (0, 0, 255) 
-        
-        time.sleep(13)
 
         f = open('text.txt')
         lines2 = f.readlines()

@@ -31,7 +31,6 @@ vector<int> k_nn(const vector<vector<double> >& a, const vector<vector<double> >
 	
     vector<pair<double, int> > dists;
     dists.resize(a.size() + b.size());
-
     for (size_t i = 0; i < a.size(); ++i) {
 		dists[i] = make_pair(dists_get(a[i], p[ik]), 0);
 	}

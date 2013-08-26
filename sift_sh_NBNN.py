@@ -109,86 +109,7 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.setMouseCallback(win, onmouse)
     return vis
 
-def NBNN(kp,desc,img,kp1,kp2,k):
-	feature_num = len(kp)
-	local_features = []
-	for i in xrange(k*10+1):
-		local_features.append([])
-	i = 0 
-	green = (0, 255, 0)
-	red = (0, 0, 255)
 
-	colors = []
-	m = float(len(kp1))/len(kp2)
-	a_coefficient = 255/(pow(k,m))
-	
-	point_a = 0
-	point_b = 0
-	
-	for i in xrange(k+1):
-		val =  a_coefficient*pow(i,m) 
-		colors.append((0, int(val), 255-int(val)))
-	
-	print colors
-	for i in xrange(feature_num):
-		tmpa = None
-		tmpb = None
-	
-		dists = []
-		
-		for k_a in xrange(len(kp1)):
-			sum_a = 0
-			if len(desc[i]) != len(desc1[k_a]):
-				print 'error'
-				break
-			for j_a in xrange(len(desc[i])):
-				sum_a += (desc[i][j_a]-desc1[k_a][j_a])**2
-			dists.append([sum_a,0,0])
-		
-		for k_b in xrange(len(kp2)):
-			sum_b = 0
-			if len(desc[i]) != len(desc2[k_b]):
-				print 'error'
-				break
-			for j_b in xrange(len(desc[i])):
-				sum_b += (desc[i][j_b]-desc2[k_b][j_b])**2
-			dists.append([sum_b,1,0])
-
-		import heapq
-		dists = heapq.nsmallest(k, dists)
-		sum_elem_a = 0
-		sum_elem_b = 0
-		
-		
-		
-		for j in xrange(k):
-			if dists[j][1] == 0:
-				sum_elem_a += 1
-			else:
-				sum_elem_b += 1
-				
-
-		print 'sum_elem_a' + str(sum_elem_a) + 'sum_elem_b' + str(sum_elem_b)
-		local_features[sum_elem_a].append(kp[i])
-		
-		if sum_elem_a > sum_elem_b:
-			point_a += 3
-		else:
-			point_b += 2
-
-	
-	for i in xrange(k+1):
-		img = cv2.drawKeypoints(img, local_features[i], flags=4, color=colors[i])
-	cv2.imshow('NBNN',img)
-	cv2.imwrite('test.jpg',img)
-	
-	print point_a
-	print point_b
-	
-	if point_a > point_b:
-		print "This image is A_Green class" 
-	else:
-		print "This image is B_Red class" 
 	
 		
 		
@@ -231,7 +152,6 @@ if __name__ == '__main__':
 			img = cv2.imread('../good/' + good_file,0)
 			kp_pre_g, desc_pre_g = detector.detectAndCompute(img, None)
                         kp_g.extend(kp_pre_g)
-                        print len(kp_g)
 			desc_g.extend(desc_pre_g)	
 	
 	
@@ -244,7 +164,6 @@ if __name__ == '__main__':
 	kp3, desc3 = detector.detectAndCompute(img, None)
 	print 'img3 - %d features' % (len(kp3))
 	
-	time1 = time.clock()
         # -*- coding: utf-8 -*-	
 	##write to disc
 	f = open('../good_desc.txt', 'a')
@@ -266,44 +185,9 @@ if __name__ == '__main__':
 	
 	f = open('../query_desc.txt', 'a')
         for arr in desc3:
-                for val in arr:
-                        f.write(str(val))
-                        f.write('\t')
-                f.write('\n')
-        f.close()
+		for val in arr:
+            		f.write(str(val))
+            		f.write('\t')
+            	f.write('\n')
+    	f.close()
  
-        green = (0, 255, 0)
-	red = (0, 0, 255) 
-        
-        time.sleep(13)
-
-        f = open('text.txt')
-        lines2 = f.readlines()
-        f.close()	
-        
-        
-        ka = [] 
-	kb = []
-        for x_a in xrange(len(kp3)):
-            t = lines2[x_a].strip()
-            if int(t) == 0:
-                ka.append(kp3[x_a])
-            elif int(t) == 1:
-                kb.append(kp3[x_a])
-            else:
-                print "okay"
-
-        img = cv2.drawKeypoints(img, ka, flags=4, color=green)
-        img = cv2.drawKeypoints(img, kb, flags=4, color=red)
-
-	cv2.imshow('NBNN',img)
-	cv2.imwrite('../test.jpg',img)
-        print len(kp3)	
-	time2 = time.clock()
-	
-	print time1-starttime
-	print time2-time1
-	
-	#Showing Window
-	cv2.waitKey()
-	cv2.destroyAllWindows()
