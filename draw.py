@@ -122,7 +122,7 @@ if __name__ == '__main__':
     starttime = time.clock()
     detector, matcher = init_feature(feature_name)
 
-    fn3 = '../../dm1.jpg'
+    fn3 = '../../dm6.jpg'
     img = cv2.imread(fn3,0)
     kp3, desc3 = detector.detectAndCompute(img, None)
     print 'img3 - %d features' % (len(kp3))
@@ -143,6 +143,8 @@ if __name__ == '__main__':
 
     img = cv2.drawKeypoints(img, ka, flags=4, color=green)
     img = cv2.drawKeypoints(img, kb, flags=4, color=red)
+
+    print 'Benign class %d, Malignant class %d' % (len(ka),len(kb))
 
     cv2.imshow('NBNN',img)
     cv2.imwrite('../test.jpg',img)	

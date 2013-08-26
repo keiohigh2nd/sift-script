@@ -159,10 +159,11 @@ if __name__ == '__main__':
 	print 'img1 - %d features, img2 - %d features' % (len(kp_m), len(kp_g))
 	
 	##test image
-	fn3 = '../../dm1.jpg'
+	fn3 = '../../dm6.jpg'
 	img = cv2.imread(fn3,0)
 	kp3, desc3 = detector.detectAndCompute(img, None)
 	print 'img3 - %d features' % (len(kp3))
+
 	
         # -*- coding: utf-8 -*-	
 	##write to disc
