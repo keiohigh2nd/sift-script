@@ -121,8 +121,15 @@ if __name__ == '__main__':
     feature_name = opts.get('--feature', 'sift')
     starttime = time.clock()
     detector, matcher = init_feature(feature_name)
+    
+    argvs = sys.argv
+    argc = len(argvs)
+    if (argc != 2):
+        print 'Usage: # python %s filename' % argvs[0]
+        quit()
 
-    fn3 = '../../dm6.jpg'
+    
+    fn3 = argvs[1]
     img = cv2.imread(fn3,0)
     kp3, desc3 = detector.detectAndCompute(img, None)
     print 'img3 - %d features' % (len(kp3))

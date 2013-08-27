@@ -157,9 +157,15 @@ if __name__ == '__main__':
 	
 	##test
 	print 'img1 - %d features, img2 - %d features' % (len(kp_m), len(kp_g))
-	
+        argvs = sys.argv
+        argc = len(argvs)
+        if (argc != 2):
+            print 'Usage: # python %s filename' % argvs[0]
+            quit()
+
+        	
 	##test image
-	fn3 = '../../dm6.jpg'
+	fn3 = argvs[1]
 	img = cv2.imread(fn3,0)
 	kp3, desc3 = detector.detectAndCompute(img, None)
 	print 'img3 - %d features' % (len(kp3))
