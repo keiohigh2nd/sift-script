@@ -1,10 +1,12 @@
-#!/bin/bash
-set -xu
+#!/bin/sh
 
-python=/home/appl/bin/python2.7
-python2.7 sift_fn_NBNN.py
+files="/home/keiohigh2nd/fundus/fundus-image-20130524/DM/*"
 
-g++ -O2 tab.cpp
-./a.out
+for filepath in ${files}
+do
+  filename=`basename ${filepath}`
+  echo ${filename}
+  echo ${filepath}
+done
 
-echo done
+read wait

@@ -110,51 +110,40 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     return vis
 
 
+	
+		
+		
 if __name__ == '__main__':
-    import sys, getopt,os,time	
-    f = open('text.txt')
-    lines2 = f.readlines()
-    f.close()
+	import sys, getopt,os
+	import time
+	opts, args = getopt.getopt(sys.argv[1:], '', ['feature='])
+	opts = dict(opts)
+	feature_name = opts.get('--feature', 'sift')
+	
+	starttime = time.clock()
+	detector, matcher = init_feature(feature_name)
+	
+	current = os.getcwd()
+	
+	##File Locations for Database
+        argvs = sys.argv
+        argc = len(argvs)
+        if (argc != 2):
+            print 'Usage: # python %s filename' % argvs[0]
+            quit()	
+        	
+	##test image
+	fn3 = argvs[1]
+	img = cv2.imread(fn3,0)
+	kp3, desc3 = detector.detectAndCompute(img, None)
+	print 'img3 - %d features' % (len(kp3))
 
-    opts, args = getopt.getopt(sys.argv[1:], '', ['feature='])
-    opts = dict(opts)
-    feature_name = opts.get('--feature', 'sift')
-    starttime = time.clock()
-    detector, matcher = init_feature(feature_name)
-    
-    argvs = sys.argv
-    argc = len(argvs)
-    if (argc != 2):
-        print 'Usage: # python %s filename' % argvs[0]
-        quit()
-
-    
-    fn3 = argvs[1]
-    img = cv2.imread(fn3,0)
-    kp3, desc3 = detector.detectAndCompute(img, None)
-    print 'img3 - %d features' % (len(kp3))
-
-    green = (0, 255, 0)
-    red = (0, 0, 255)	        
-	        
-    ka = [] 
-    kb = []
-    for x_a in xrange(len(kp3)):
-	    t = lines2[x_a].strip()
-	    if int(t) == 0:
-		    ka.append(kp3[x_a])
-	    elif int(t) == 1:
-	        kb.append(kp3[x_a])
-	    else:
-	        print "okay"
-
-    img = cv2.drawKeypoints(img, kb, flags=4, color=red)
-
-    print 'Benign class %d, Malignant class %d' % (len(ka),len(kb))
-
-    cv2.imshow('NBNN',img)
-    cv2.imwrite('../test.jpg',img)	
-
-    #Showing Window
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+	
+	f = open('../query_desc.txt', 'a')
+        for arr in desc3:
+		for val in arr:
+            		f.write(str(val))
+            		f.write('\t')
+            	f.write('\n')
+    	f.close()
+ 
