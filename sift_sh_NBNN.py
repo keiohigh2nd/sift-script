@@ -124,10 +124,16 @@ if __name__ == '__main__':
 	detector, matcher = init_feature(feature_name)
 	
 	current = os.getcwd()
+
+        argvs = sys.argv
+        argc = len(argvs)
+        if (argc != 4):
+            print 'Usage: # python %s filename' % argvs[0]
+            quit()
 	
 	##File Locations for Database
-	mal_files = os.listdir(current + '/../mal')
-	good_files = os.listdir(current + '/../good')
+	mal_files = os.listdir(current + argvs[2])
+	good_files = os.listdir(current + argvs[3])
 	test_files = os.listdir(current + '/../picts')
 
 	kp_m = []
@@ -137,7 +143,7 @@ if __name__ == '__main__':
 			print 'skip'
 		else:
 			print mal_file
-			img = cv2.imread('../mal/' + mal_file,0)
+			img = cv2.imread(argvs[2] + mal_file,0)
 			kp_pre_m, desc_pre_m = detector.detectAndCompute(img, None)
 			kp_m.extend(kp_pre_m)
 			desc_m.extend(desc_pre_m)
@@ -149,7 +155,7 @@ if __name__ == '__main__':
 			print 'skip'
 		else:
 			print good_file
-			img = cv2.imread('../good/' + good_file,0)
+			img = cv2.imread(argvs[3] + good_file,0)
 			kp_pre_g, desc_pre_g = detector.detectAndCompute(img, None)
                         kp_g.extend(kp_pre_g)
 			desc_g.extend(desc_pre_g)	
@@ -157,11 +163,6 @@ if __name__ == '__main__':
 	
 	##test
 	print 'img1 - %d features, img2 - %d features' % (len(kp_m), len(kp_g))
-        argvs = sys.argv
-        argc = len(argvs)
-        if (argc != 2):
-            print 'Usage: # python %s filename' % argvs[0]
-            quit()
 
         	
 	##test image

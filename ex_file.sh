@@ -8,9 +8,10 @@ rm ../query_desc.txt
 rm text.txt
 
 python=/home/appl/bin/python2.7
-files="/home/keiohigh2nd/fundus/fundus-image-20130524/DM/*"
-pre="/home/keiohigh2nd/fundus/fundus-image-20130524/DM/1.jpg"
-python2.7 sift_sh_NBNN.py ${pre}
+files="/home/keiohigh2nd/local_tool/sample_images/dermatoscopy/ncn_test/*"
+pre="/home/keiohigh2nd/local_tool/sample_images/dermatoscopy/ncn_test/1.jpg"
+
+python2.7 sift_sh_NBNN.py ${pre} $1 $2
 
 for filepath in ${files}
 do
