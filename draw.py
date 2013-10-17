@@ -151,10 +151,19 @@ if __name__ == '__main__':
     img = cv2.drawKeypoints(img, kb, flags=4, color=red)
 
     print 'Benign class %d, Malignant class %d' % (len(ka),len(kb))
-
-    cv2.imshow('NBNN',img)
-    cv2.imwrite('../test.jpg',img)	
+    
+    f1 = open('res_class.txt', 'w')
+    if(len(ka) > len(kb)):
+        f1.write("benign")
+    else:
+        f1.write("mal")
+    f1.write("\t")
+    f1.close()
+     
+    tmp = str(fn3)
+    #cv2.imshow('NBNN',img)
+    cv2.imwrite('../res%d.jpg'%tmp,img)	
 
     #Showing Window
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+    #cv2.waitKey()
+    #cv2.destroyAllWindows()

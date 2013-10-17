@@ -132,8 +132,8 @@ if __name__ == '__main__':
             quit()
 	
 	##File Locations for Database
-	mal_files = os.listdir(current + argvs[2])
-	good_files = os.listdir(current + argvs[3])
+	mal_files = os.listdir(argvs[2])
+	good_files = os.listdir(argvs[3])
 	test_files = os.listdir(current + '/../picts')
 
 	kp_m = []

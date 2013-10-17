@@ -9,17 +9,13 @@ rm ../classify_result_.txt
 rm text.txt
 
 python=/home/appl/bin/python2.7
-files="/home/keiohigh2nd/local_tool/sample_images/adj_images/normal/*"
-pre="/home/keiohigh2nd/local_tool/sample_images/adj_images/normal/10.jpg"
+files="/home/keiohigh2nd/local_tool/sample_images/adj_images/DM/*"
 
-good="/home/keiohigh2nd/local_tool/sample_images/DM1005/"
-mal="/home/keiohigh2nd/local_tool/sample_images/mal_1005/"
-python2.7 sift_sh_NBNN.py ${pre} ${mal} ${good}
 
 for filepath in ${files}
 do
   python2.7 sift_sh_NBNN_file.py ${filepath}
-  g++ -O2 tab.cpp
+  g++ -O2 3class.cpp
   ./a.out
   python2.7 draw_file.py ${filepath}
   rm text.txt

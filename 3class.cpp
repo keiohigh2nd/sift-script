@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-    const std::string g_file_name = "../good_desc.txt";
+    const std::string g_file_name = "../normal1005.txt";
     std::ifstream g_file(g_file_name.c_str());
     if (!g_file){
 	cerr << "Failed to open file: file name=" << g_file_name << endl;
@@ -30,7 +30,7 @@ int main()
 	}
 	
 	
-    const std::string m_file_name = "../mal_desc.txt";
+    const std::string m_file_name = "../amd1005.txt";
     std::ifstream m_file(m_file_name.c_str());
     std::string m_temp;
     vector<vector<double> > b;
@@ -41,7 +41,21 @@ int main()
 	     		b.back().push_back(x);
 	   }
 	 }
-	
+
+    const std::string e_file_name = "../dm1005.txt";
+    std::ifstream e_file(e_file_name.c_str());
+    std::string e_temp;
+    vector<vector<double> > e;
+    while (std::getline(e_file, e_temp)) {
+                e.push_back(vector<double>());
+                stringstream ss(e_temp);
+                for (double x; ss>>x;) {
+                        e.back().push_back(x);
+           }
+         }
+
+
+
 		
     const std::string q_file_name = "../query_desc.txt";
     std::ifstream q_file(q_file_name.c_str());
@@ -67,12 +81,10 @@ int main()
 	    ofs <<ret[it]<< endl;
 	}		
     }
-    
-    /*
-    int res_int = nn(a,b,p);
+
+    int res_int = nn(a,b,e,p);
     std::ofstream ofs1( "nbnn_test.txt", std::ios::app );
     ofs1 << res_int << std::endl;
-    */
 
     double end = gettimeofday_sec();
     cout << "Time = " << end - start << " sec." << endl;

@@ -158,3 +158,8 @@ if __name__ == '__main__':
         f.write("Malignant")
     f.write('\n')
     f.close()
+
+    tmp = str(fn3)
+    segments = tmp.split("/")
+    print segments[-1] 
+    cv2.imwrite('../res%s'%segments[-1],img)
