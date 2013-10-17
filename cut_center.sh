@@ -6,7 +6,7 @@ i=0
 
 for filepath in ${files}
 do
-  convert -crop 410x763+299+86 ${filepath} ${i}.jpg
+  convert -crop 577x726+246+136 ${filepath} ${i}.jpg
   i=`expr $i + 1`
 done
 
