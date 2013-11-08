@@ -109,53 +109,133 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     cv2.setMouseCallback(win, onmouse)
     return vis
 
+def c0(x,y):
+	if x > 430 and x < 650:
+		if y > 433 and y < 622:
+			return 1
+	return 0
 
-	
-		
-		
+def c1(x,y):
+	if x > 242 and x < 724:
+		if y > 136 and y < 340:
+			return 1
+
+        if x > 698 and x < 902:
+                if y > 266 and y < 735:
+			return 1
+
+        if x > 242 and x < 724:
+                if y > 635 and y < 850:
+			return 1
+	return 0
+
+def c2(x,y):
+        if x > 650 and x < 926:
+                if y > 242 and y < 421:
+                        return 1
+        return 0
+
+def c3(x,y):
+        if x > 301 and x < 910:
+                if y > 205 and y < 590:
+                        return 1
+        return 0
+
+
+
 if __name__ == '__main__':
-	import sys, getopt,os
-	import time
-	opts, args = getopt.getopt(sys.argv[1:], '', ['feature='])
-	opts = dict(opts)
-	feature_name = opts.get('--feature', 'sift')
-	
-	starttime = time.clock()
-	detector, matcher = init_feature(feature_name)
-	
-	current = os.getcwd()
+    import sys, getopt,os,time	
+    f = open('text.txt')
+    lines2 = f.readlines()
+    f.close()
 
-        argvs = sys.argv
-	
-	##File Locations for Database
-	mal_files = os.listdir(argvs[2])
-        
+    opts, args = getopt.getopt(sys.argv[1:], '', ['feature='])
+    opts = dict(opts)
+    feature_name = opts.get('--feature', 'sift')
+    starttime = time.clock()
+    detector, matcher = init_feature(feature_name)
+    
+    argvs = sys.argv
+    argc = len(argvs)
+    if (argc != 2):
+        print 'Usage: # python %s filename' % argvs[0]
+        quit()
 
-	kp_m = []
-	desc_m = []
-        i = 0
-	for mal_file in mal_files:
-		if mal_file == '.DS_Store':
-			print 'skip'
-		else:
-			print mal_file
-			img = cv2.imread(argvs[2] + mal_file,0)
-			kp_pre_m, desc_pre_m = detector.detectAndCompute(img, None)
-			kp_m.extend(kp_pre_m)
-			desc_m.extend(desc_pre_m)
-			i += 1
-		
-	##write to disc
-        tmp = str(argvs[2])
-        segments = tmp.split("/")
-        print tmp
-        print segments[-2]
+    
+    fn3 = argvs[1]
+    img = cv2.imread(fn3,0)
+    kp3, desc3 = detector.detectAndCompute(img, None)
+    print 'img3 - %d features' % (len(kp3))
 
-	f = open('../%s_desc.txt'%segments[-2], 'a')
-	for arr in desc_m:
-		for val in arr:
-			f.write(str(val))
-			f.write('\t')
-		f.write('\n')
-	f.close()	
- 
+    green = (0, 255, 0)
+    red = (0, 0, 255)
+    red_3 = (255, 255, 51)
+    red_2 = (255, 153, 255)
+	        
+    ka = [] 
+    kb = []
+    kc = []
+    kd = []
+
+    f = open('../ranked_point_desc.txt', 'a')
+    rank = []
+    for x_a in xrange(len(kp3)):
+	    t = lines2[x_a].strip()
+	    if int(t) == 0:
+	        ka.append(kp3[x_a])
+	    elif int(t) == 1:
+	        kb.append(kp3[x_a])
+            elif int(t) == 2:
+                kc.append(kp3[x_a])
+            elif int(t) == 3:
+                kd.append(kp3[x_a])
+		rank.append(x_a)
+	    else:
+	        print "okay"
+
+    img = cv2.drawKeypoints(img, kd, flags=4, color=red)
+    #img = cv2.drawKeypoints(img, kc, flags=4, color=red_3)
+    #img = cv2.drawKeypoints(img, kb, flags=4, color=red_2) 
+    
+    tmp = len(kb)
+    tmp += len(kc)
+    tmp += len(kd)
+
+    print 'Benign class %d, Malignant class %d' % (len(ka),tmp)
+    f = open('../classify_result_.txt', 'a')
+    if len(ka) > len(kb):
+        f.write("Benign")
+    else:
+        f.write("Malignant")
+    f.write('\n')
+    f.close()
+
+
+
+    #ratio_a = float(count_a)/total
+    #ratio_b = float(count_b)/total
+    #ratio_c = float(count_c)/total
+
+
+    f2 = open('../pointAMD.txt', 'a')
+    #f3 = open('../pointDM0.txt', 'a')
+
+
+    f2.close()
+    #f3.close()
+    tmp = str(fn3)
+    segments = tmp.split("/")
+
+    
+
+    """
+    f1 = open('../ranked_%s_point_desc.txt'%segments[-1], 'a')
+    for i in rank:
+	for val in desc3[i]:
+		f1.write(str(val))
+		f1.write('\t')
+	f1.write('\n')
+    f1.close()
+    
+    cv2.imwrite('../tmp_pic/res%s'%segments[-1],img)
+    """

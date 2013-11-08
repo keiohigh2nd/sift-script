@@ -23,7 +23,6 @@ double dists_get(const vector<double>& x,const vector<double>& y) {
 vector<int> k_nn(const vector<vector<double> >& a, const vector<vector<double> >& b, const vector<vector<double> >& p, int k){
   vector<int> result_class;
   double step = (double)k/3;
-  std::cout << "k desuyo" << step <<std::endl;
   for (size_t ik = 0; ik < p.size(); ++ik) {
 	if (k > a.size() + b.size()){
 		throw "k is too big ";

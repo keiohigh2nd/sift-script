@@ -141,6 +141,23 @@ def c3(x,y):
                         return 1
         return 0
 
+def c4(x,y):
+        if x > 430 and x < 650:
+                if y > 433 and y < 622:
+                        return 1
+
+        if x > 242 and x < 724:
+                if y > 136 and y < 340:
+                        return 1
+
+        if x > 698 and x < 902:
+                if y > 266 and y < 735:
+                        return 1
+
+        if x > 242 and x < 724:
+                if y > 635 and y < 850:
+                        return 1
+        return 0
 
 
 if __name__ == '__main__':
@@ -215,33 +232,25 @@ if __name__ == '__main__':
     count_b = 0
     count_c = 0
 
+    totalx = []
+    totaly = []
+
     for i in kd:
-	tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-	if tmp  == 0:
-		tmp1 = c2(i.pt[0],i.pt[1])
-		count_b += tmp1
-		if tmp1 ==0:
-			count_c += c3(i.pt[0],i.pt[1])
+	if c4(i.pt[0],i.pt[1]) == 1:
+		totalx.append(i.pt[0])
+		totaly.append(i.pt[1])
+
 
     for i in kc:
-        tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-        if tmp  == 0:
-                tmp1 = c2(i.pt[0],i.pt[1])
-                count_b += tmp1
-                if tmp1 == 0:
-                        count_c += c3(i.pt[0],i.pt[1])
+        if c4(i.pt[0],i.pt[1]) == 1:
+                totalx.append(i.pt[0])
+                totaly.append(i.pt[1])
 
     for i in kb:
-        tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-        if tmp  == 0:
-                tmp1 = c2(i.pt[0],i.pt[1])
-                count_b += tmp1
-                if tmp1 == 0:
-                        count_c += c3(i.pt[0],i.pt[1])
-	
+        if c4(i.pt[0],i.pt[1]) == 1:
+                totalx.append(i.pt[0])
+                totaly.append(i.pt[1])	
+
     p  = len(kd) + len(kc)
   
     total = count_a + count_b
@@ -251,8 +260,20 @@ if __name__ == '__main__':
     #ratio_c = float(count_c)/total
 
 
-    f2 = open('../pointAMD.txt', 'a')
-    #f3 = open('../pointDM0.txt', 'a')
+    f2 = open('../pointDM.txt', 'a')
+    f3 = open('../pointDM_ave_x.txt', 'a')
+    f4 = open('../pointDM_ave_y.txt', 'a')
+
+    for i in totalx:
+	f3.write(str(i))
+	f3.write('\n')
+
+    for i in totaly:
+	f4.write(str(i))
+	f4.write('\n')
+
+    f3.close()
+    f4.close()
 
     if count_a > 3:
 	 if count_b > 2:

@@ -9,7 +9,7 @@ import os
 def init_feature(name):
     chunks = name.split('-')
     if chunks[0] == 'sift':
-        detector = cv2.SIFT()
+        detector = cv2.SIFT(0,3, 0.02, 5.0, 1.6)
         norm = cv2.NORM_L2
     elif chunks[0] == 'surf':
         detector = cv2.SURF(800)

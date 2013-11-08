@@ -110,22 +110,22 @@ def explore_match(win, img1, img2, kp_pairs, status = None, H = None):
     return vis
 
 def c0(x,y):
-	if x > 430 and x < 650:
-		if y > 433 and y < 622:
+	if x > 430 and x < 550:
+		if y > 433 and y < 552:
 			return 1
 	return 0
 
 def c1(x,y):
-	if x > 242 and x < 724:
-		if y > 136 and y < 340:
+	if x > 254 and x < 724:
+		if y > 136 and y < 318:
 			return 1
 
-        if x > 698 and x < 902:
+        if x > 745 and x < 902:
                 if y > 266 and y < 735:
 			return 1
 
         if x > 242 and x < 724:
-                if y > 635 and y < 850:
+                if y > 665 and y < 820:
 			return 1
 	return 0
 
@@ -141,7 +141,28 @@ def c3(x,y):
                         return 1
         return 0
 
+def c4(x,y):
+        if x > 430 and x < 650:
+                if y > 433 and y < 622:
+                        return 1
 
+        if x > 242 and x < 724:
+                if y > 136 and y < 340:
+                        return 1
+
+        if x > 698 and x < 902:
+                if y > 266 and y < 735:
+                        return 1
+
+        if x > 242 and x < 724:
+                if y > 635 and y < 850:
+                        return 1
+        return 0
+
+
+def calc_dis(x0,y0,x1,y1):
+	tmp = (x1-x0)*2 + (y1-y0)*2
+	return tmp
 
 if __name__ == '__main__':
     import sys, getopt,os,time	
@@ -193,15 +214,11 @@ if __name__ == '__main__':
 	    else:
 	        print "okay"
 
-    img = cv2.drawKeypoints(img, kd, flags=4, color=red)
+    #img = cv2.drawKeypoints(img, kd, flags=4, color=red)
     #img = cv2.drawKeypoints(img, kc, flags=4, color=red_3)
     #img = cv2.drawKeypoints(img, kb, flags=4, color=red_2) 
     
-    tmp = len(kb)
-    tmp += len(kc)
-    tmp += len(kd)
 
-    print 'Benign class %d, Malignant class %d' % (len(ka),tmp)
     f = open('../classify_result_.txt', 'a')
     if len(ka) > len(kb):
         f.write("Benign")
@@ -210,79 +227,94 @@ if __name__ == '__main__':
     f.write('\n')
     f.close()
 
+    
+    DM_y = 494.473219557731
+    DM_x = 609.762829066857
+    AMD_y = 521.185139323592
+    AMD_x = 536.710076687492
 
+    tmp_a = 0
+    tmp_d = 0
+
+    count_m = 0
+    count_n = 0
     count_a = 0
-    count_b = 0
-    count_c = 0
+    count_d = 0
+    count_center = 0
 
     for i in kd:
-	tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-	if tmp  == 0:
-		tmp1 = c2(i.pt[0],i.pt[1])
-		count_b += tmp1
-		if tmp1 ==0:
-			count_c += c3(i.pt[0],i.pt[1])
-
-    for i in kc:
-        tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-        if tmp  == 0:
-                tmp1 = c2(i.pt[0],i.pt[1])
-                count_b += tmp1
-                if tmp1 == 0:
-                        count_c += c3(i.pt[0],i.pt[1])
-
-    for i in kb:
-        tmp = c0(i.pt[0],i.pt[1])
-        count_a += tmp
-        if tmp  == 0:
-                tmp1 = c2(i.pt[0],i.pt[1])
-                count_b += tmp1
-                if tmp1 == 0:
-                        count_c += c3(i.pt[0],i.pt[1])
-	
-    p  = len(kd) + len(kc)
-  
-    total = count_a + count_b
-
-    #ratio_a = float(count_a)/total
-    #ratio_b = float(count_b)/total
-    #ratio_c = float(count_c)/total
-
-
-    f2 = open('../pointAMD.txt', 'a')
-    #f3 = open('../pointDM0.txt', 'a')
-
-    if count_a > 3:
-	 if count_b > 2:
-	 	f2.write("DM")
-		f2.write('\n')
-	 else:
-	 	f2.write("AMD")
-	 	f2.write('\n')
-    else:
-	 if count_b > 3:
-		 f2.write("DM")
-		 f2.write('\n')
-		 #f3.write(str(ratio_b))
-		 #f3.write('\n')
-	 else:
-	 	 if count_c > 3:
-		 	f2.write("AMD")
-		 	f2.write('\n')
-		 else:
-		 	f2.write("normal")
-                        f2.write('\n')
-
-    f2.close()
-    #f3.close()
-    tmp = str(fn3)
-    segments = tmp.split("/")
-
+        if c0(i.pt[0],i.pt[1]) == 1:
+	    count_center += 1
+	else:
+	    if c4(i.pt[0],i.pt[1]) == 1:
+		if c1(i.pt[0],i.pt[1]) == 1:
+                    count_d += 1
+		else:
+		    count_a += 1
+	    else:
+	        count_n += 1
     
+    for i in kc:
+        if c0(i.pt[0],i.pt[1]) == 1:
+            count_center += 1
+        else:
+            if c4(i.pt[0],i.pt[1]) == 1:
+                if c1(i.pt[0],i.pt[1]) == 1:
+                    count_d += 1
+                else:
+                    count_a += 1
+            else:
+                count_n += 1   
+
+ 
+    for i in kb:
+        if c0(i.pt[0],i.pt[1]) == 1:
+            count_center += 1
+        else:
+            if c4(i.pt[0],i.pt[1]) == 1:
+                if c1(i.pt[0],i.pt[1]) == 1:
+                    count_d += 1
+                else:
+                    count_a += 1
+            else:
+                count_n += 1
 
     """
+    for i in ka:
+        if c4(i.pt[0],i.pt[1]) == 1:
+            tmp_a += calc_dis(AMD_x, AMD_y, i.pt[0], i.pt[1])
+            tmp_d += calc_dis(DM_x, DM_y, i.pt[0], i.pt[1])
+    """
+
+    f2 = open('../pointNormal.txt', 'a')
+    if len(ka) < len(kp3)*0.4:
+	if count_center > 0:
+		f2.write("AMD")
+                f2.write('\n')
+	else:
+    		if count_a > count_d:
+			f2.write("AMD") 
+			f2.write('\n')
+    		else:
+        		f2.write("DM") 
+        		f2.write('\n')
+    else:
+	if c4(i.pt[0],i.pt[1]) == 0:
+	    f2.write("Normal")
+            f2.write('\n')
+	else:
+	    f2.write("AMD")
+            f2.write('\n')
+
+    f2.close()
+
+
+    print "Normal  %d, Malignant %d"%(count_n, count_m)
+    print "Ka %d"%(len(ka))
+
+    """
+    tmp = str(fn3)
+    segments = tmp.split("/")
     f1 = open('../ranked_%s_point_desc.txt'%segments[-1], 'a')
     for i in rank:
 	for val in desc3[i]:
